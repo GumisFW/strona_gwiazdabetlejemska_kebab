@@ -1,53 +1,244 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dla mojego cukiereczka</title>
-    <style>
-      
-        body {
-            background-color: #ffe4e1; /* Lekko różowy kolor (MistyRose) */
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>?</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
-        
-        h1 {
-            margin-top: 50px;
-            font-size: 3rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-       
-        .ramka {
-            margin-top: 40px;
-            background-color: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            line-height: 0; /* Usuwa zbędny odstęp pod obrazkiem */
-        }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Share Tech Mono', monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
 
-        .ramka img {
-            max-width: 90vw; /* Zdjęcie nie wykroczy poza szerokość ekranu */
-            height: auto;
-            border-radius: 5px;
-        }
-    </style>
+    #main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      transition: opacity 0.4s ease;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 3.5rem);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      font-weight: 400;
+      text-align: center;
+      animation: flicker 6s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 95%, 100% { opacity: 1; }
+      96% { opacity: 0.85; }
+      97% { opacity: 1; }
+      98% { opacity: 0.7; }
+      99% { opacity: 1; }
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: min(420px, 90vw);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #fff;
+      color: #fff;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.1rem;
+      padding: 14px 20px;
+      outline: none;
+      letter-spacing: 0.1em;
+      caret-color: #fff;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]::placeholder {
+      color: transparent;
+    }
+
+    input[type="text"]:focus {
+      border-color: #fff;
+      box-shadow: 0 0 18px rgba(255,255,255,0.15);
+    }
+
+    .hint {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.35);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    input[type="text"]:focus ~ .hint,
+    input[type="text"]:focus + .hint {
+      opacity: 1;
+    }
+
+    /* overlay */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      z-index: 10;
+    }
+
+    #overlay.fade-in {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* coming soon pixelated */
+    #coming-soon {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #coming-soon.show {
+      opacity: 1;
+    }
+
+    .pixel-text {
+      font-size: clamp(2rem, 8vw, 6rem);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fff;
+      image-rendering: pixelated;
+      text-shadow:
+        3px 3px 0 #555,
+        6px 6px 0 #333,
+        9px 9px 0 #222;
+      animation: pixelGlitch 0.8s steps(1) infinite;
+      font-family: 'Share Tech Mono', monospace;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    @keyframes pixelGlitch {
+      0%   { text-shadow: 3px 3px 0 #555, 6px 6px 0 #333; filter: blur(0px); transform: translate(0,0); }
+      10%  { text-shadow: -3px 2px 0 #888, 5px -4px 0 #444; filter: blur(0.5px); transform: translate(2px,-1px); }
+      20%  { text-shadow: 4px -3px 0 #333, -2px 5px 0 #666; filter: blur(0px); transform: translate(-1px,0); }
+      30%  { text-shadow: 3px 3px 0 #555, 6px 6px 0 #333; filter: blur(0px); transform: translate(0,0); }
+      60%  { text-shadow: 3px 3px 0 #555, 6px 6px 0 #333; filter: blur(0px); transform: translate(0,0); }
+      61%  { text-shadow: -4px 0px 0 #aaa, 3px 3px 0 #222; filter: blur(1px); transform: translate(3px,0); }
+      62%  { text-shadow: 3px 3px 0 #555, 6px 6px 0 #333; filter: blur(0px); transform: translate(0,0); }
+      90%  { text-shadow: 3px 3px 0 #555, 6px 6px 0 #333; filter: blur(0px); transform: translate(0,0); }
+      91%  { text-shadow: 5px -2px 0 #777, -3px 4px 0 #111; filter: blur(0.5px); transform: translate(-2px,1px); }
+      92%  { text-shadow: 3px 3px 0 #555, 6px 6px 0 #333; filter: blur(0px); transform: translate(0,0); }
+      100% { text-shadow: 3px 3px 0 #555, 6px 6px 0 #333; filter: blur(0px); transform: translate(0,0); }
+    }
+
+    /* scanlines effect on coming soon */
+    #coming-soon::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.3) 2px,
+        rgba(0,0,0,0.3) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .pixel-text {
+      position: relative;
+      z-index: 2;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Witam Cię mój cukiereczku</h1>
-
-    <div class="ramka">
-        <img src="walentynki.png" alt="Walentynka">
+  <div id="main">
+    <h1>Czego tu szukasz?</h1>
+    <div class="search-wrapper">
+      <input type="text" id="searchInput" autocomplete="off" spellcheck="false">
+      <span class="hint">god.wifi</span>
     </div>
+  </div>
 
+  <div id="overlay"></div>
+
+  <div id="coming-soon">
+    <div class="pixel-text">COMING SOON...</div>
+  </div>
+
+  <script>
+    const input = document.getElementById('searchInput');
+    const overlay = document.getElementById('overlay');
+    const comingSoon = document.getElementById('coming-soon');
+    const main = document.getElementById('main');
+
+    // show hint only when focused and empty
+    input.addEventListener('input', () => {
+      const hint = document.querySelector('.hint');
+      hint.style.opacity = (input.value.length === 0 && document.activeElement === input) ? '1' : '0';
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') checkInput();
+    });
+
+    // also trigger on typing god.wifi
+    input.addEventListener('input', () => {
+      if (input.value.trim().toLowerCase() === 'god.wifi') {
+        setTimeout(checkInput, 300);
+      }
+    });
+
+    function checkInput() {
+      if (input.value.trim().toLowerCase() === 'god.wifi') {
+        triggerSequence();
+      }
+    }
+
+    function triggerSequence() {
+      // fade out main
+      main.style.opacity = '0';
+      main.style.pointerEvents = 'none';
+
+      // fade in black overlay
+      overlay.classList.add('fade-in');
+
+      // after 1 second show coming soon
+      setTimeout(() => {
+        comingSoon.classList.add('show');
+      }, 1000);
+    }
+  </script>
 </body>
 </html>
